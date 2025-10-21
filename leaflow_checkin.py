@@ -12,10 +12,32 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
-import requests
-from datetime import datetime
+from selenium.common.exceptions import TimeoutException
+
+# 启动浏览器（这里用 Chrome，如果是 GitHub Actions 建议用 chromium）
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")  # 无界面模式，适合服务器/CI环境
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+
+driver = webdriver.Chrome(options=options)
+
+try:
+    driver.get("https://www.google.com")
+    print("✅ 打开 Google 成功")
+
+    # 等待搜索框出现，最多等 5 秒
+    element = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.NAME, "q"))
+    )
+    print("✅ 找到搜索框")
+
+except TimeoutException:
+    print("❌ 等待超时，元素未出现")
+
+finally:
+    driver.quit()
+
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -640,3 +662,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
