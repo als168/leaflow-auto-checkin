@@ -2,8 +2,8 @@ name: Leaflow Auto Checkin
 
 on:
   schedule:
-    - cron: '0 1 * * *' # 每天UTC时间01:00运行（北京时间09:00）
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 1 * * *'   # 每天 UTC 时间 01:00 运行（北京时间 09:00）
+  workflow_dispatch:       # 允许手动触发
 
 jobs:
   checkin:
@@ -23,11 +23,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Install Chrome
+    - name: Install Chromium and driver
       run: |
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
-        
+        sudo apt-get install -y chromium-browser chromium-chromedriver
+        # 建立软链接，保证 selenium 能找到驱动
+        sudo ln -s /usr/bin/chromedriver /usr/local/bin/chromedriver || true
+
     - name: Run auto checkin
       env:
         LEAFLOW_ACCOUNTS: ${{ secrets.LEAFLOW_ACCOUNTS }}
