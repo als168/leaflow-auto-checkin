@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  alpine-vps:
+    build:
+      context: .
+      args:
+        TUIC_VERSION: ${TUIC_VERSION:-latest}
+        HY2_VERSION: ${HY2_VERSION:-latest}
+        INSTALL_AT_BUILD: ${INSTALL_AT_BUILD:-true}
+    image: leaflow/alpine-vps:latest
+    container_name: leaflow-alpine-vps
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
+    ports:
+      - "443:443/udp"
+      - "8443:8443/udp"
+      - "1080:1080/tcp"
+    volumes:
+      - ./data/tuic:/etc/tuic
+      - ./data/hysteria:/etc/hysteria
+      - ./data/runtime:/srv/proxy
+    environment:
+      - TZ=${TZ:-UTC}
+    restart: unless-stopped
+    command: ["/bin/sh", "-c", "tail -f /dev/null"]
