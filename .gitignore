@@ -1,0 +1,41 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+htmlcov/
+.pytest_cache/
+.coverage*
+.cache/
+.mypy_cache/
+.tox/
+
+# Virtual environments
+.venv/
+venv/
+.env
+.env.*
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Docker runtime data
+data/
+
+# Local overrides
+docker-compose.override.yml
